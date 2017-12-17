@@ -1,12 +1,14 @@
 <template>
   <div id="hello">
     <h1>Vue.js loves Pokemons</h1>
-    <ul v-if="pokemons && pokemons.length">
+    <input v-on:keyup.enter="filterPokemon" placeholder="Type the pokemon and press enter..."/>
+    <ul v-if="pokemons.length">
       <li v-for="(pokemon) of pokemons">
       <img v-bind:src="pokemon.img"/>
         <p><strong>{{pokemon.name}}</strong></p>
       </li>
     </ul>
+    <div v-else>... no pokemons found :(</div>
   </div>
 </template>
 
@@ -35,6 +37,12 @@ export default {
         console.log("pokemon array", this.pokemons)
       })
     },
+    filterPokemon: function(e) {
+      if (!e.target.value) this.getPokemon()
+      this.pokemons = this.pokemons.filter((pokemon) => {
+        return pokemon.name.includes(e.target.value)
+      })
+    },
   },
   created() {
     this.getPokemon()
@@ -59,6 +67,26 @@ li {
   margin: 20px;
   padding: 20px 40px;
   box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.2);
+  transition: 0.35s box-shadow ease;
+  position: relative;
 }
 
+li:hover  {
+  box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.4);
+}
+
+input {
+  border: 0;
+  padding: 24px;
+  width: 400px;
+  font-size: 18px;
+  box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.2);
+  margin-bottom: 40px;
+  outline: none;
+  transition: 0.35s box-shadow ease;
+}
+input:focus {
+  box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.4);
+
+}
 </style>

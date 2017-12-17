@@ -1,32 +1,43 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
+  <div id="hello">
+    <h1>Vue.js loves Pokemons</h1>
+    <ul v-if="pokemons && pokemons.length">
+      <li v-for="(pokemon) of pokemons">
+      <img v-bind:src="pokemon.img"/>
+        <p><strong>{{pokemon.name}}</strong></p>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  name: 'HelloWorld',
-  data () {
+  data() {
+    console.log(this)
     return {
-      msg: 'Welcome to Your Vue.js App'
-    }
+      pokemons: []
+      }
+  },
+  methods: {
+    getPokemon: function () {
+      axios.get(`https://pokeapi.co/api/v2/pokemon/?limit=151`)
+      .then(response => {
+        // JSON responses are automatically parsed.
+        this.pokemons = response.data.results;
+        let id = 0;
+        this.pokemons.forEach((obj) => {
+          id++
+          obj.id = id;
+          obj.img = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+        })
+        console.log("pokemon array", this.pokemons)
+      })
+    },
+  },
+  created() {
+    this.getPokemon()
   }
 }
 </script>
@@ -39,12 +50,15 @@ h1, h2 {
 ul {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
 }
 li {
-  display: inline-block;
-  margin: 0 10px;
+  margin: 20px;
+  padding: 20px 40px;
+  box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.2);
 }
-a {
-  color: #42b983;
-}
+
 </style>

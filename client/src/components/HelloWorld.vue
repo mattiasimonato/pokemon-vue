@@ -4,6 +4,7 @@
     <input v-on:keyup.enter="filterPokemon" placeholder="Type the pokemon and press enter..."/>
     <ul v-if="pokemons.length">
       <li v-for="(pokemon) of pokemons">
+      <img v-on:click="removePokemon(pokemon)" class="x-icon" src="https://www.econedlink.org/iat/assets/imgs/deleteSign.png" alt="">
       <img v-bind:src="pokemon.img"/>
         <p><strong>{{pokemon.name}}</strong></p>
       </li>
@@ -42,6 +43,10 @@ export default {
       this.pokemons = this.pokemons.filter((pokemon) => {
         return pokemon.name.includes(e.target.value)
       })
+    },
+    removePokemon: function(pokemon) {
+      console.log(pokemon - 1)
+      this.pokemons.splice(this.pokemons.indexOf(pokemon), 1);
     },
   },
   created() {
@@ -89,4 +94,22 @@ input:focus {
   box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.4);
 
 }
+.x-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(50%, -50%);
+  width: 30px;
+  height: auto;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.35s all ease;
+  cursor: pointer;
+}
+
+li:hover .x-icon  {
+  visibility: visible;
+  opacity: 1;
+}
+
 </style>
